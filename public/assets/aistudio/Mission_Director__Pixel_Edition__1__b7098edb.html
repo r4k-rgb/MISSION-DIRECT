@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Mission Director: Pixel Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0b1e;--pn:#1c1840;--pn2:#2a2560;--ln:#5b52c9;--tx:#f4f1ff;--mu:#9a94d6;--cy:#4de8ff;--yl:#ffd23f;--gr:#6ee7a0;--rd:#ff5d73;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;image-rendering:pixelated}
+body{margin:0;background:var(--bg);color:var(--tx);font:10px/1.8 'Press Start 2P',ui-monospace,monospace;min-height:100%}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+#app{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:14px}
+h1{font-size:26px;line-height:1.3;color:var(--yl);text-shadow:4px 4px 0 #b8421f;margin:24px 0 8px}
+h2{font-size:12px;color:var(--cy);margin:16px 0 8px}
+.c{text-align:center}.cy{color:var(--cy)}.yl{color:var(--yl)}.mu{color:var(--mu)}small{font-size:8px;color:var(--mu)}
+.pt{width:80px;height:80px;background:var(--pn2);border:4px solid var(--ln);flex:none}
+.pn{background:var(--pn);border:4px solid var(--ln);box-shadow:0 4px 0 #000;padding:12px;margin-bottom:12px}.pn.lk{opacity:.45}
+.bt{font:inherit;background:var(--yl);color:#1a1230;border:0;padding:10px 12px;box-shadow:0 4px 0 #b8860b,0 0 0 3px #000;cursor:pointer;margin:6px 4px}.bt:active{transform:translateY(3px);box-shadow:0 1px 0 #b8860b,0 0 0 3px #000}.bt:disabled{background:#555;box-shadow:0 4px 0 #333;cursor:not-allowed}
+.op{font:inherit;background:var(--pn2);color:var(--tx);border:3px solid var(--ln);padding:8px;cursor:pointer}.op.on{border-color:var(--yl);background:#3d3680}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:6px 0 12px}
+.bar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--pn);border:4px solid var(--ln);padding:8px}
+.dlg{display:flex;gap:14px;align-items:flex-start;background:var(--pn);border:4px solid var(--ln);box-shadow:0 4px 0 #000;padding:14px;margin-top:50vh;cursor:pointer;min-height:130px}
+.dlg p{margin:6px 0;min-height:70px}
+.mt{margin:6px 0}.tr{height:10px;background:#07051a;border:2px solid var(--ln)}.tr i{display:block;height:100%;background:var(--gr)}.tr i.bad{background:var(--rd)}
+.pv,.lc{width:100%;max-width:480px;display:block;margin:8px auto;border:4px solid var(--ln);background:#07051a}.pv{max-width:180px;height:180px}
+.st{font-size:24px;color:var(--yl);margin:10px}.nv{color:var(--cy);margin:10px 0 0}
+button:focus-visible{outline:3px solid var(--cy);outline-offset:2px}
+</style></head><body><canvas id="sky"></canvas><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),A=$('#app');
+const NO=['....kk....','...cccc...','..cccccc..','.cwwccwwc.','.cwkccwkc.','.cccccccc.','.ckkkkkkc.','..cccccc..','..d.dd.d..','.dd....dd.'];
+const HU=['..hhhhhh..','.hhhhhhhh.','.hssssssh.','.hskssksh.','.hssssssh.','..sssmss..','...ssss...','.tttttttt.','tttttttttt','tttttttttt'];
+const VX=HU.map((r,i)=>i==3?'.hvvvvvvh.':r);
+const PAL={N:{c:'#4de8ff',d:'#1a6a8a',w:'#fff',k:'#10131f'},R:{h:'#2b1a12',s:'#e0a878',k:'#10131f',m:'#a04040',t:'#ff9f1c'},B:{h:'#d8d8e8',s:'#c98f66',k:'#10131f',m:'#a04040',t:'#6ee7a0'},V:{h:'#e63946',s:'#e8b896',k:'#10131f',m:'#a04040',t:'#5b2a86',v:'#0a0a14'}};
+const CH={N:['NOVA',NO],R:['KAPTEN RANI',HU],B:['DR. BIMA',HU],V:['VEX',VX]};
+function spr(cv,k){const g=cv.getContext('2d'),p=PAL[k];CH[k][1].forEach((row,y)=>[...row].forEach((c,x)=>{if(p[c]){g.fillStyle=p[c];g.fillRect(x,y,1,1)}}))}
+function rk(g,x,y,h,f){g.fillStyle='#f4f1ff';g.fillRect(x-4,y,8,h);g.fillStyle='#ff5d73';g.fillRect(x-4,y-4,8,4);g.fillRect(x-2,y-7,4,3);g.fillStyle='#4de8ff';g.fillRect(x-2,y+4,4,4);g.fillStyle='#ff5d73';g.fillRect(x-8,y+h-6,4,6);g.fillRect(x+4,y+h-6,4,6);if(f){g.fillStyle='#ffd23f';g.fillRect(x-3,y+h,6,5+f%4*2);g.fillStyle='#ff8c1a';g.fillRect(x-1,y+h,2,3+f%3*2)}}
+const INTRO=[['','BAB 1 - STASIUN KONTROL GARUDA, TAHUN 2041'],['N','Selamat datang, Direktur. Aku NOVA, AI pengendali misi. Direktur lama menghilang setelah menangkap sinyal aneh dari luar Neptunus.'],['R','Aku Kapten Rani, kepala teknisi. Roket kita terbatas dan dana tipis. Rancang setiap misi dengan cerdas.'],['B','Dr. Bima, ilmuwan utama. Setiap instrumen yang kamu kirim membawa kita lebih dekat ke sumber sinyal itu.'],['V','Vex dari Konsorsium Orbit. Kalau misimu meledak, jangan kaget. Aku sudah mengantre untuk kursimu.'],['N','Kita mulai dari satelit cuaca kecil. Bangun reputasi, kumpulkan kredit, lalu kejar sinyal itu.']];
+const END=[['','BAB AKHIR - ORBIT NEPTUNUS'],['N','Kontak! Sinyalnya berhenti sejenak, lalu membalas dengan koordinat bintang baru.'],['B','Ini bukan ancaman. Ini undangan.'],['V','...Baiklah, Direktur. Kursimu aman. Aku ikut denganmu.'],['R','Siapkan roket generasi berikutnya. Perjalanan sesungguhnya baru dimulai.'],['','TAMAT. TERIMA KASIH SUDAH BERMAIN!']];
+const MIS=[
+{n:'Merapi-1',t:'Satelit Cuaca',b:60,dv:2,sci:3,pre:['R','Badai mengancam kampung nelayan. Satelit cuaca kecil bisa menyelamatkan mereka.'],post:['B','Data awannya sempurna. Para nelayan selamat.']},
+{n:'Candra',t:'Orbiter Bulan',b:90,dv:4,sci:5,pre:['B','Kawah gelap di kutub Bulan menyimpan es. Kita butuh radar yang bagus.'],post:['N','Kamera menangkap pantulan logam di dasar kawah. Itu bukan batu.']},
+{n:'Bumi Merah',t:'Penjelajah Mars',b:130,dv:6,sci:7,pre:['R','Mars butuh delta-v besar. Pertimbangkan mesin ion atau roket berat.'],post:['B','Ada pola sinyal di bawah debu, berulang tiap sebelas menit.']},
+{n:'Samudra Beku',t:'Probe Europa',b:170,dv:8,sci:9,pre:['V','Europa? Ambisius sekali. Kuharap dananya cukup.'],post:['N','Sinyal yang sama bergema dari bawah es. Sumbernya makin jelas.']},
+{n:'Gema',t:'Orbiter Neptunus',b:220,dv:10,sci:12,pre:['N','Inilah saatnya. Sumber sinyal ada di orbit Neptunus. Semua yang kita punya dipertaruhkan.'],post:['R','Mesin utama stabil. Semua sistem menyala!']}];
+const LA=[['Roket Mini',20,2,.82],['Roket Medium',40,4,.9],['Roket Berat',70,7,.95],['Roket Super',100,10,.97]],EN=[['Mesin Kimia',15,1],['Mesin Ion',30,3],['Mesin Nuklir',55,5]],IN=[['Kamera',10,2],['Spektrometer',20,4],['Radar',30,5],['Laser',40,7]];
+const EV=['BADAI MATAHARI menghantam pesawatmu!','Serpihan antariksa melintas dekat!','Sinyal misterius mengganggu komunikasi!'];
+let S={cr:50,cl:[0,0,0,0,0],up:[0,0,0],sk:0,seen:0},sel,mi,CUT=null,LO=0,AC;
+try{S={...S,...JSON.parse(localStorage.getItem('mdpx')||'{}')}}catch(e){}
+const save=()=>{try{localStorage.setItem('mdpx',JSON.stringify(S))}catch(e){}};
+const bp=(f=440,d=.08)=>{try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=f;g.gain.value=.04;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}};
+function cut(L,cb){let i=0,t,w;const show=()=>{const[k,x]=L[i];A.innerHTML=`<div class=dlg data-a=nx>${k?'<canvas id=pp width=10 height=10 class=pt></canvas>':''}<div><b class=yl>${k?CH[k][0]:''}</b><p id=tx></p><small>klik untuk lanjut</small></div></div>`;if(k)spr($('#pp'),k);let n=0;w=x;clearInterval(t);t=setInterval(()=>{n++;$('#tx').textContent=x.slice(0,n);if(n%3==0)bp(k=='V'?180:k=='N'?700:300,.03);if(n>=x.length)clearInterval(t)},24)};
+CUT=()=>{const e=$('#tx');if(e.textContent.length<w.length){clearInterval(t);e.textContent=w;return}i++;if(i>=L.length){clearInterval(t);CUT=null;cb()}else show()};show()}
+function title(){A.innerHTML=`<div class=c><h1>MISSION<br>DIRECTOR</h1><p class=cy>PIXEL EDITION</p><canvas id=p1 width=10 height=10 class=pt></canvas><p class=mu>Rancang roket. Kejar sinyal dari Neptunus.</p>${S.seen?'<button class=bt data-a=hub>LANJUT</button><button class=bt data-a=new>ULANG DARI AWAL</button>':'<button class=bt data-a=new>MULAI</button>'}</div>`;spr($('#p1'),'N')}
+function hub(){S.seen=1;save();const tot=S.cl.reduce((a,b)=>a+b,0);A.innerHTML=`<div class=bar><span>KREDIT ${S.cr}</span><span>STREAK ${S.sk}</span><span>BINTANG ${tot}/15</span></div><h2>PILIH MISI</h2>${MIS.map((m,i)=>{const lk=i&&!S.cl[i-1];return`<div class="pn ${lk?'lk':''}"><b>${i+1}. ${m.n}</b> <span class=mu>${m.t}</span><br><small>Dana ${m.b+S.up[0]*10} / Delta-V ${m.dv} / Sains ${m.sci}</small><br><span class=yl>${'★'.repeat(S.cl[i])}${'☆'.repeat(3-S.cl[i])}</span> ${lk?'<span class=mu>TERKUNCI</span>':`<button class=bt data-a=pick data-i=${i}>MAIN</button>`}</div>`}).join('')}<h2>LAB UPGRADE</h2><div class=g>${['Dana +10','Delta-V +1','Sains +10%'].map((n,i)=>{const c=40*(S.up[i]+1);return`<button class=bt data-a=up data-i=${i} ${S.up[i]>=5||S.cr<c?'disabled':''}>${n}<br><small>Lv ${S.up[i]} - ${S.up[i]>=5?'MAX':c+' KR'}</small></button>`}).join('')}</div>`}
+const calc=()=>{const m=MIS[mi],L=LA[sel.l],E=EN[sel.e];return{m,cost:L[1]+E[1]+sel.i.reduce((a,j)=>a+IN[j][1],0)+(sel.s?15:0),dv:L[2]+E[2]+S.up[1],sci:sel.i.reduce((a,j)=>a+IN[j][2],0)*(1+.1*S.up[2]),bud:m.b+S.up[0]*10}};
+const mt=(l,v,t,ok)=>`<div class=mt>${l} ${Math.round(v*10)/10} / ${t}<div class=tr><i class="${ok?'':'bad'}" style="width:${Math.min(100,v/t*100)}%"></i></div></div>`;
+function design(){const c=calc(),m=c.m,okC=c.cost<=c.bud,okD=c.dv>=m.dv,go=okC&&okD&&sel.i.length,tip=!okD?'Delta-V kurang. Pilih roket atau mesin lebih kuat.':!okC?'Dana melebihi batas.':!sel.i.length?'Pasang minimal satu instrumen.':c.sci<m.sci?'Sains belum cukup untuk bintang ke-2.':c.cost>.85*c.bud?'Hemat sedikit lagi untuk bintang ke-3.':'Rancangan bagus. Siap meluncur!';
+const row=(a,k,v)=>a.map((p,j)=>`<button class="op ${v(j)?'on':''}" data-a=s data-k=${k} data-i=${j}>${p[0]}<br><small>${p[1]} KR</small></button>`).join('');
+A.innerHTML=`<h2>${m.n}: ${m.t}</h2><canvas id=pv width=60 height=60 class=pv></canvas><div class=pn><b>ROKET</b><div class=g>${row(LA,'l',j=>sel.l==j)}</div><b>MESIN</b><div class=g>${row(EN,'e',j=>sel.e==j)}</div><b>INSTRUMEN</b><div class=g>${row(IN,'i',j=>sel.i.includes(j))}</div><b>PERISAI</b><div class=g><button class="op ${sel.s?'on':''}" data-a=s data-k=s>Perisai Radiasi<br><small>15 KR</small></button></div></div><div class=pn>${mt('DANA',c.cost,c.bud,okC)}${mt('DELTA-V',c.dv,m.dv,okD)}${mt('SAINS',c.sci,m.sci,c.sci>=m.sci)}<p class=nv>NOVA: ${tip}</p></div><button class=bt data-a=go ${go?'':'disabled'}>LUNCURKAN!</button><button class=bt data-a=hub>MUNDUR</button>`;
+const g=$('#pv').getContext('2d');g.fillStyle='#07051a';g.fillRect(0,0,60,60);rk(g,30,18,14+sel.l*5,1);sel.i.forEach((j,n)=>{g.fillStyle='#4de8ff';g.fillRect(4+n*5,54,4,4)});if(sel.s){g.fillStyle='#6ee7a0';g.fillRect(24,6,12,2)}}
+function launch(){const fail=Math.random()>LA[sel.l][3]+(sel.s?.03:0);A.innerHTML=`<h2>PELUNCURAN: ${MIS[mi].n}</h2><canvas id=lc width=120 height=90 class=lc></canvas><p id=cd class="c yl"></p>`;const g=$('#lc').getContext('2d');let f=0,P=[];const st=[...Array(30)].map(()=>[Math.random()*120,Math.random()*90,1+Math.random()*2]);
+const step=()=>{f++;g.fillStyle='#07051a';g.fillRect(0,0,120,90);g.fillStyle='#fff';st.forEach(s=>{s[1]=(s[1]+s[2]*(f>40?2:0))%90;g.fillRect(s[0],s[1],1,1)});g.fillStyle='#2a2560';g.fillRect(0,80+Math.max(0,f-40)*2,120,10);const y=f<40?60:60-(f-40)*.5,h=16+sel.l*4;
+if(fail&&f>=90){if(f==90){bp(90,.4);for(let i=0;i<40;i++)P.push([60,y,(Math.random()-.5)*3,(Math.random()-.5)*3])}P.forEach(p=>{p[0]+=p[2];p[1]+=p[3];g.fillStyle=['#ffd23f','#ff5d73','#fff'][Math.random()*3|0];g.fillRect(p[0],p[1],2,2)})}else{rk(g,60,y,h,f);if(f%13==1)bp(f<40?300:200,.05)}
+$('#cd').textContent=f<40?'T-'+Math.ceil((40-f)/13):fail&&f>=90?'GAGAL!':'MENGUDARA...';
+if(f<150)requestAnimationFrame(step);else fail?result(0):event()};step()}
+function event(){A.innerHTML=`<h2>ANOMALI!</h2><div class=pn><p>${EV[Math.random()*3|0]}</p><p class=mu>Apa keputusanmu, Direktur?</p><button class=bt data-a=ev data-i=0>MODE AMAN<br><small>sains x0.8, pasti selamat</small></button><button class=bt data-a=ev data-i=1>NEKAT!<br><small>${sel.s?75:55}%: sains x1.6, jika gagal x0.4</small></button></div>`}
+function result(k){const c=calc(),m=c.m,ok=k>0,sci=c.sci*k;let s=0;if(ok)s=1+(sci>=m.sci)+(c.cost<=.85*c.bud);const g=ok?s*30+S.sk*5:10;S.cr+=g;S.sk=ok?S.sk+1:0;if(s>S.cl[mi])S.cl[mi]=s;LO=ok;save();bp(ok?880:120,.3);
+A.innerHTML=`<h2>${ok?'MISI SUKSES':'MISI GAGAL'}</h2><div class="pn c"><div class=st>${'★'.repeat(s)}${'☆'.repeat(3-s)}</div><p>Sains ${Math.round(sci*10)/10} / ${m.sci}</p><p class=yl>+${g} KREDIT${ok&&S.sk>1?' (streak x'+S.sk+')':''}</p><button class=bt data-a=after>LANJUT</button></div>`}
+const ACT={new:()=>{S={cr:50,cl:[0,0,0,0,0],up:[0,0,0],sk:0,seen:0};save();cut(INTRO,hub)},hub,nx:()=>CUT&&CUT(),
+pick:d=>{mi=+d.i;sel={l:0,e:0,i:[],s:0};cut([MIS[mi].pre],design)},
+up:d=>{const i=+d.i,c=40*(S.up[i]+1);if(S.cr>=c&&S.up[i]<5){S.cr-=c;S.up[i]++;save();hub()}},
+s:d=>{const k=d.k,i=+d.i;if(k=='l')sel.l=i;else if(k=='e')sel.e=i;else if(k=='s')sel.s^=1;else sel.i=sel.i.includes(i)?sel.i.filter(x=>x!=i):[...sel.i,i];design()},
+go:launch,ev:d=>result(+d.i?(Math.random()<.55+(sel.s?.2:0)?1.6:.4):.8),
+after:()=>LO?cut([MIS[mi].post],mi==4?()=>cut(END,hub):hub):cut([['V','Meledak? Sudah kuduga. Coba lagi, Direktur.'],['R','Jangan menyerah. Naikkan upgrade di lab, lalu coba rancangan lain.']],hub)};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&!el.disabled){bp(520,.04);ACT[el.dataset.a](el.dataset)}});
+const sk=$('#sky'),sg=sk.getContext('2d'),ST=[...Array(60)].map(()=>[Math.random()*160,Math.random()*90,Math.random()*6.28]);sk.width=160;sk.height=90;
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+(function sky(t){sg.fillStyle='#0d0b1e';sg.fillRect(0,0,160,90);ST.forEach(s=>{sg.fillStyle=Math.sin(t/500+s[2])>0?'#fff':'#5b52c9';sg.fillRect(s[0]|0,s[1]|0,1,1)});if(!RM)requestAnimationFrame(sky)})(0);
+title();
+</script></body></html>

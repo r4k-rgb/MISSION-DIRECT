@@ -1,0 +1,8 @@
+{
+  "name": "Mission Director: Pixel Edition",
+  "description": "A narrative-driven pixel-art space agency simulator combining rocket physics engineering, material crafting, interactive orbital flight, and deep-space mystery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
